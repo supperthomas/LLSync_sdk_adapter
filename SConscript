@@ -30,24 +30,27 @@ src += Split('''
     qcloud_iot_explorer_ble/src/core/ble_qiot_llsync_ota.c
     qcloud_iot_explorer_ble/src/core/ble_qiot_service.c
     ''')
+group = DefineGroup('llsync', src, depend = ['PKG_USING_LLSYNC_SDK_ADAPTER'], CPPPATH = path)
 
+path = [cwd]
+src = []
 
-path += [
-    cwd + '/hal/nimble']
-    
-    
-src += Split('''
-    hal/nimble/ble_qiot_ble_device.c
-    hal/nimble/flash_storage.c    
-    hal/nimble/mcu_service.c   
-    ''')
+if GetDepend(['PKG_USING_NIMBLE']):
+    path += [
+        cwd + '/hal/nimble']
+
+    src += Split('''
+        hal/nimble/ble_qiot_ble_device.c
+        hal/nimble/flash_storage.c    
+        hal/nimble/mcu_service.c   
+        ''')
 
 
 LOCAL_CCFLAGS = ''
 
 if rtconfig.CROSS_TOOL == 'keil':
     LOCAL_CCFLAGS += ' --gnu '
-    
-group = DefineGroup('llsync', src, depend = ['PKG_USING_NIMBLE'], CPPPATH = path, LOCAL_CCFLAGS = LOCAL_CCFLAGS)
+
+group = DefineGroup('llsync_nimble', src, depend = ['PKG_USING_LLSYNC_SDK_ADAPTER'], CPPPATH = path, LOCAL_CCFLAGS = LOCAL_CCFLAGS)
 
 Return('group')
