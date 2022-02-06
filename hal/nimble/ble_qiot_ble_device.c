@@ -25,6 +25,12 @@ extern "C" {
 #include "host/ble_gap.h"
 #endif
 
+#ifdef __RTTHREAD__
+#include "rtthread.h"
+#include "rtdevice.h"
+#endif
+
+
 // divece info which defined in explorer platform
 #define PRODUCT_ID  "05SAS7U5N4"
 #define DEVICE_NAME "ble"
@@ -214,13 +220,19 @@ uint16_t ble_get_user_data_mtu_size(void)
 
 void property_power_switch(const char *data, uint16_t len)
 {
-    MODLOG_DFLT(INFO, "===%s==%d==len:%x=data:%x==\r\n", __func__, __LINE__, len, data[0]);
-
 #define DK_BOARD_LED_2  18
-
+    MODLOG_DFLT(INFO, "===%s==%d==len:%x=data:%x==\r\n", __func__, __LINE__, len, data[0]);
+static uint8_t first_flag = 0;
+    if(!first_flag)
+    {
+        first_flag = 1;
+        rt_pin_mode(DK_BOARD_LED_2, PIN_MODE_OUTPUT);
+    }
 #ifdef __RTTHREAD__
-    rt_pin_write(DK_BOARD_LED_2, data[0]);
+    rt_pin_write(DK_BOARD_LED_2, !data[0]);
 #endif
+
+
     return;
 }
 
