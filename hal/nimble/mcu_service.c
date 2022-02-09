@@ -230,7 +230,7 @@ blehr_on_sync(void)
     rc = ble_hs_id_infer_auto(0, &blehr_addr_type);
     assert(rc == 0);
 
-    ble_qiot_explorer_init();
+   // ble_qiot_explorer_init();
     /* Begin advertising */
     blehr_advertise();
 
@@ -250,10 +250,24 @@ void ble_services_add(const qiot_service_init_s *p_service)
     ble_hs_cfg.sync_cb = blehr_on_sync;
 
     rc = gatt_svr_init();
+}
 
-    /* startup bluetooth host stack*/
+void llsync_thread_entry(void *parameter)
+{
+    ble_qiot_explorer_init();
     ble_hs_thread_startup();
 }
+void ble_llsync(void)
+{
+    rt_thread_t tid;
+    /* startup bluetooth host stack*/
+
+    tid = rt_thread_create("llsyn", llsync_thread_entry, RT_NULL,
+                           2048, 6, 20);
+    RT_ASSERT(tid != RT_NULL);
+    rt_thread_startup(tid);
+}
+
 #ifdef __RTTHREAD__
-MSH_CMD_EXPORT_ALIAS(ble_services_add, ble_services_add, "bluetoooth SERVICE senson sample");
+MSH_CMD_EXPORT_ALIAS(ble_llsync, ble_llsync, "bluetoooth SERVICE senson sample");
 #endif

@@ -47,11 +47,11 @@ then build burn it with keil project
 
 enter the shell
 
-the cmd ble_services_add , will start the ble sample
+the cmd ble_llsync, will start the ble sample
 
 ```
 
-msh >ble_services_add
+msh >ble_llsync
 [I/nimble] GAP procedure initiated: stop advertising.
 [I/nimble] GAP procedure initiated: stop advertising.
 [I/nimble] ===ble_advertising_stop==197=====
