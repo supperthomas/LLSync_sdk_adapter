@@ -51,6 +51,6 @@ LOCAL_CCFLAGS = ''
 if rtconfig.CROSS_TOOL == 'keil':
     LOCAL_CCFLAGS += ' --gnu '
 
-group = DefineGroup('llsync_nimble', src, depend = ['PKG_USING_LLSYNC_SDK_ADAPTER'], CPPPATH = path, LOCAL_CCFLAGS = LOCAL_CCFLAGS)
+group += DefineGroup('llsync_nimble', src, depend = ['PKG_USING_LLSYNC_SDK_ADAPTER'], CPPPATH = path, LOCAL_CCFLAGS = LOCAL_CCFLAGS)
 
 Return('group')
